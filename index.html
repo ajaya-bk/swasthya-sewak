@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="ne">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>स्वास्थ्य सेवक</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=FREE"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+:root{
+  --bg:#f5f7fa;
+  --surface:#ffffff;
+  --card:#ffffff;
+  --border:#e8edf5;
+  --border2:#d1daea;
+
+  --teal:#0ea87e;
+  --teal-light:#e6f7f2;
+  --teal-mid:#b2e8d8;
+  --teal-dark:#0b7a5c;
+
+  --red:#e8365d;
+  --red-light:#fdedf1;
+  --amber:#f59e0b;
+  --amber-light:#fef3c7;
+  --blue:#2563eb;
+  --blue-light:#eff6ff;
+  --purple:#7c3aed;
+  --purple-light:#f5f3ff;
+  --green:#059669;
+  --green-light:#ecfdf5;
+  --orange:#ea580c;
+  --orange-light:#fff7ed;
+
+  --text:#0f172a;
+  --text2:#334155;
+  --muted:#64748b;
+  --faint:#94a3b8;
+
+  --radius:16px;
+  --radius-sm:10px;
+  --shadow:0 1px 4px rgba(15,23,42,0.06), 0 4px 16px rgba(15,23,42,0.08);
+  --shadow-sm:0 1px 3px rgba(15,23,42,0.07);
+  --shadow-lg:0 8px 40px rgba(15,23,42,0.14);
+}
+
+body{
+  background:var(--bg);
+  font-family:'Noto Sans Devanagari','Plus Jakarta Sans',sans-serif;
+  display:flex;justify-content:center;
+  min-height:100vh;
+  padding:0;
+}
+#app{
+  width:100%;max-width:430px;
+  background:var(--bg);
+  display:flex;flex-direction:column;
+  min-height:100vh;
+  position:relative;
+  overflow:hidden;
+}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:76px;}
+.screen.no-pad{padding-bottom:0;}
+.screen::-webkit-scrollbar{display:none;}
+
+/* ── HEADER ── */
+.topbar{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:14px 18px;
+  display:flex;align-items:center;justify-content:space-between;
+  position:sticky;top:0;z-index:100;
+}
+.brand-row{display:flex;align-items:center;gap:10px;}
+.brand-logo{
+  width:36px;height:36px;border-radius:10px;
+  background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;box-shadow:0 3px 10px rgba(14,168,126,0.35);
+}
+.brand-name{font-size:16px;font-weight:800;color:var(--text);letter-spacing:-0.3px;}
+.brand-sub{font-size:9px;color:var(--muted);font-weight:500;}
+.voice-toggle{
+  background:var(--teal-light);border:1px solid var(--teal-mid);
+  border-radius:20px;padding:6px 14px;
+  color:var(--teal-dark);font-size:11px;font-weight:700;cursor:pointer;
+  font-family:inherit;display:flex;align-items:center;gap:5px;
+  transition:all 0.2s;
+}
+.voice-toggle.on{background:var(--teal);color:#fff;border-color:var(--teal);}
+
+/* ── BOTTOM NAV ── */
+.bottomnav{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  padding:10px 0 18px;
+  display:flex;justify-content:space-around;
+  position:fixed;bottom:0;left:50%;
+  transform:translateX(-50%);
+  width:100%;max-width:430px;
+  z-index:100;
+}
+.navbtn{
+  background:none;border:none;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:4px 28px;font-family:inherit;
+}
+.navbtn .icon{font-size:20px;line-height:1;}
+.navbtn .lbl{font-size:10px;color:var(--faint);font-weight:600;margin-top:1px;}
+.navbtn.active .lbl{color:var(--teal);}
+.navbtn .pip{width:18px;height:3px;border-radius:2px;background:var(--teal);opacity:0;transition:opacity 0.2s;}
+.navbtn.active .pip{opacity:1;}
+
+/* ── CARDS ── */
+.card{
+  background:var(--card);border-radius:var(--radius);
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
+}
+.card-lift{box-shadow:var(--shadow);}
+.sec-label{
+  font-size:10px;font-weight:800;color:var(--muted);
+  letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;
+}
+
+/* ── BUTTONS ── */
+.btn{
+  border:none;border-radius:12px;padding:14px 18px;
+  font-size:15px;font-weight:700;cursor:pointer;
+  font-family:'Noto Sans Devanagari',sans-serif;
+  width:100%;transition:all 0.15s;
+}
+.btn:active{transform:scale(0.98);}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--teal-dark));color:#fff;box-shadow:0 4px 14px rgba(14,168,126,0.35);}
+.btn-yes{
+  background:var(--green-light);border:2px solid var(--teal)!important;
+  color:var(--teal-dark);font-size:17px;padding:20px;border-radius:14px;
+  cursor:pointer;width:100%;font-family:'Noto Sans Devanagari',sans-serif;
+  font-weight:800;transition:all 0.15s;
+}
+.btn-no{
+  background:var(--red-light);border:2px solid var(--red)!important;
+  color:var(--red);font-size:17px;padding:20px;border-radius:14px;
+  cursor:pointer;width:100%;font-family:'Noto Sans Devanagari',sans-serif;
+  font-weight:800;transition:all 0.15s;
+}
+.btn-yes:active,.btn-no:active{transform:scale(0.98);}
+.back-btn{
+  background:var(--bg);border:1px solid var(--border);border-radius:10px;
+  color:var(--text2);width:36px;height:36px;cursor:pointer;
+  font-size:15px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;font-weight:700;
+}
+.stepper-btn{
+  width:52px;height:52px;border-radius:14px;
+  border:1.5px solid var(--border2);background:var(--bg);
+  font-size:24px;cursor:pointer;font-weight:700;
+  display:flex;align-items:center;justify-content:center;
+  font-family:inherit;color:var(--text2);
+  box-shadow:var(--shadow-sm);transition:all 0.15s;
+}
+.stepper-btn:active{transform:scale(0.94);background:var(--teal-light);}
+.speak-btn{
+  background:var(--teal-light);border:1px solid var(--teal-mid);
+  border-radius:10px;color:var(--teal-dark);
+  width:38px;height:38px;cursor:pointer;font-size:17px;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+/* ── INPUTS ── */
+.np-input{
+  background:var(--bg);border:1.5px solid var(--border2);
+  border-radius:10px;padding:13px 14px;color:var(--text);
+  font-size:14px;outline:none;width:100%;
+  font-family:'Noto Sans Devanagari',sans-serif;
+  transition:border-color 0.2s;
+}
+.np-input:focus{border-color:var(--teal);}
+.np-input::placeholder{color:var(--faint);}
+
+/* ── PROGRESS ── */
+.progress-track{background:rgba(255,255,255,0.25);border-radius:4px;height:5px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;background:#fff;transition:width 0.4s ease;}
+
+/* ── DISEASE GRID ── */
+.disease-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.disease-card{
+  background:var(--card);border-radius:var(--radius);
+  padding:16px 14px;cursor:pointer;text-align:left;
+  border:1.5px solid var(--border);
+  transition:all 0.18s;position:relative;overflow:hidden;
+  box-shadow:var(--shadow-sm);
+}
+.disease-card:active{transform:scale(0.97);}
+.disease-card:hover{border-color:currentColor;box-shadow:var(--shadow);}
+.d-icon{
+  width:44px;height:44px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;margin-bottom:10px;
+}
+.d-name{font-size:13px;font-weight:800;color:var(--text);line-height:1.3;}
+.d-chip{
+  margin-top:6px;display:inline-block;
+  font-size:9px;font-weight:700;
+  padding:2px 8px;border-radius:20px;
+  letter-spacing:0.5px;
+}
+
+/* ── PATIENT ROW ── */
+.patient-row{
+  background:var(--card);border-radius:14px;
+  padding:13px 14px;margin-bottom:8px;
+  display:flex;align-items:center;gap:12px;
+  border:1px solid var(--border);box-shadow:var(--shadow-sm);
+}
+
+/* ── EDU SCROLL ── */
+.edu-scroll{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;}
+.edu-scroll::-webkit-scrollbar{display:none;}
+.edu-card{
+  min-width:130px;background:var(--card);border-radius:14px;
+  padding:14px;border:1px solid var(--border);
+  flex-shrink:0;box-shadow:var(--shadow-sm);
+}
+
+/* ── SLIP ── */
+.slip{
+  background:var(--bg);border-radius:10px;padding:14px;
+  font-family:monospace;font-size:11px;color:var(--text2);
+  line-height:2;border:1px dashed var(--border2);
+}
+
+/* ── ONBOARD ── */
+.ob-screen{
+  flex:1;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:36px 28px;gap:28px;text-align:center;
+  min-height:100vh;
+  background:linear-gradient(160deg,#f0fdf9 0%,#e6f7f2 50%,#f5f7fa 100%);
+}
+
+/* ── HERO ── */
+.hero{
+  background:linear-gradient(135deg,var(--teal-dark) 0%,var(--teal) 60%,#00c9a7 100%);
+  padding:22px 18px 20px;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:"";position:absolute;top:-60px;right:-60px;
+  width:220px;height:220px;border-radius:50%;
+  background:rgba(255,255,255,0.07);
+}
+.hero::after{
+  content:"";position:absolute;bottom:-40px;left:-20px;
+  width:130px;height:130px;border-radius:50%;
+  background:rgba(255,255,255,0.05);
+}
+
+/* ── RISK PILL ── */
+.risk-pill{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:4px 10px;border-radius:20px;
+  font-size:10px;font-weight:800;letter-spacing:0.5px;
+}
+
+/* ── ANIM ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.fade-up{animation:fadeUp 0.3s ease;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
+.pulse{animation:pulse 2s infinite ease-in-out;}
+@keyframes shimmer{from{opacity:0.7;}to{opacity:1;}}
+
+.hidden{display:none!important;}
+
+/* ── Q HEADER ── */
+.q-topbar{
+  padding:14px 16px 12px;
+  display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:10;
+}
+
+/* ── RANGE ── */
+input[type="range"]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:5px;border-radius:3px;
+  background:var(--border2);outline:none;cursor:pointer;
+  margin:12px 0 20px;
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;
+  border-radius:50%;background:var(--teal);
+  box-shadow:0 2px 8px rgba(14,168,126,0.4);cursor:pointer;
+}
+
+/* ── STAT BOX ── */
+.stat-box{
+  background:rgba(255,255,255,0.15);
+  border-radius:10px;padding:10px 6px;text-align:center;
+  backdrop-filter:blur(4px);
+}
+
+/* ── BADGE ── */
+.offline-badge{
+  margin:12px 16px 0;
+  background:var(--green-light);
+  border-radius:10px;padding:9px 14px;
+  display:flex;align-items:center;gap:8px;
+  border:1px solid var(--teal-mid);
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- TOP BAR -->
+  <div class="topbar" id="main-topbar">
+    <div class="brand-row">
+      <div class="brand-logo">🏥</div>
+      <div>
+        <div class="brand-name">स्वास्थ्य सेवक</div>
+        <div class="brand-sub">Health Screening Tool</div>
+      </div>
+    </div>
+    <button class="voice-toggle" id="voiceToggle" onclick="toggleVoice()">🔇 आवाज बन्द</button>
+  </div>
+
+  <!-- ══ ONBOARDING ══ -->
+  <div id="s-onboard" class="screen no-pad">
+    <div class="ob-screen">
+      <div id="ob-icon" style="font-size:72px;" class="pulse">🏥</div>
+      <div style="max-width:300px;">
+        <div id="ob-title" style="font-size:26px;font-weight:900;color:var(--teal-dark);margin-bottom:6px;letter-spacing:-0.5px;"></div>
+        <div id="ob-sub" style="font-size:12px;color:var(--teal);font-weight:700;margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase;"></div>
+        <div id="ob-desc" style="font-size:14px;color:var(--text2);line-height:1.9;"></div>
+      </div>
+      <div id="ob-dots" style="display:flex;gap:8px;"></div>
+      <button class="btn btn-primary" id="ob-btn" onclick="obNext()" style="max-width:260px;font-size:15px;padding:16px;">अर्को →</button>
+      <div style="font-size:10px;color:var(--muted);">Testversion</div>
+    </div>
+  </div>
+
+  <!-- ══ HOME ══ -->
+  <div id="s-home" class="screen hidden">
+    <!-- Hero -->
+    <div class="hero">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;position:relative;z-index:1;">
+        <div>
+          <div style="color:rgba(255,255,255,0.7);font-size:11px;font-weight:600;margin-bottom:4px;">नमस्ते, स्वास्थ्य सेवक</div>
+          <div style="color:#fff;font-size:20px;font-weight:900;letter-spacing:-0.4px;">आजको जाँच सुरु गर्नुस्</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.15);border-radius:12px;padding:8px 12px;text-align:center;backdrop-filter:blur(4px);">
+          <div style="color:#fff;font-size:11px;font-weight:600;" id="today-date"></div>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;position:relative;z-index:1;" id="stats-row"></div>
+    </div>
+
+    <!-- Offline badge -->
+    <div class="offline-badge">
+      <span style="font-size:16px;">📶</span>
+      <span style="font-size:11px;color:var(--teal-dark);font-weight:700;">अफलाइन मोड: सबै डेटा सुरक्षित छ</span>
+      <span style="margin-left:auto;background:var(--teal);border-radius:4px;color:#fff;font-size:9px;padding:2px 6px;font-weight:800;">LIVE</span>
+    </div>
+
+    <!-- Disease section -->
+    <div style="padding:18px 16px 6px;">
+      <div class="sec-label">रोगको प्रकार छान्नुस्</div>
+      <div class="disease-grid" id="disease-grid"></div>
+    </div>
+
+    <!-- Education -->
+    <div style="padding:16px 16px 6px;">
+      <div class="sec-label">स्वास्थ्य शिक्षा</div>
+      <div class="edu-scroll" id="edu-scroll"></div>
+    </div>
+
+    <!-- Recent -->
+    <div style="padding:16px 16px 20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div class="sec-label" style="margin-bottom:0;">हालसालैका बिरामीहरू</div>
+        <button onclick="showScreen('s-history');renderHistory();" style="background:transparent;border:none;color:var(--teal);font-size:11px;cursor:pointer;font-weight:800;font-family:inherit;">सबै हेर्नुस् →</button>
+      </div>
+      <div id="recent-list"></div>
+    </div>
+  </div>
+
+  <!-- ══ PATIENT INFO ══ -->
+  <div id="s-info" class="screen hidden">
+    <div style="padding:16px;display:flex;flex-direction:column;gap:14px;" class="fade-up">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <button class="back-btn" onclick="goHome()">←</button>
+        <div>
+          <div style="font-size:16px;font-weight:800;color:var(--text);">बिरामीको जानकारी</div>
+          <div style="font-size:11px;color:var(--muted);">जाँच सुरु गर्नु अघि भर्नुस्</div>
+        </div>
+      </div>
+      <div id="info-disease-badge" class="card card-lift" style="padding:16px;"></div>
+      <div class="card card-lift" style="padding:16px;display:flex;flex-direction:column;gap:14px;">
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.8px;">बिरामीको नाम</div>
+          <input class="np-input" id="inp-name" placeholder="नाम लेख्नुस् (वैकल्पिक)"/>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.8px;">उमेर</div>
+          <input class="np-input" id="inp-age" placeholder="जस्तै: ३५" type="number"/>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.8px;">लिङ्ग</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <button id="gender-m" onclick="setGender('पुरुष')" class="btn" style="background:var(--blue-light);color:var(--blue);border:1.5px solid #bfdbfe;padding:13px;font-size:14px;">👨 पुरुष</button>
+            <button id="gender-f" onclick="setGender('महिला')" class="btn" style="background:var(--purple-light);color:var(--purple);border:1.5px solid #ddd6fe;padding:13px;font-size:14px;">👩 महिला</button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="start-btn" onclick="beginQuestions()" style="font-size:16px;padding:16px;">जाँच सुरु गर्नुस् →</button>
+    </div>
+  </div>
+
+  <!-- ══ QUESTION ══ -->
+  <div id="s-question" class="screen hidden" style="padding-bottom:0;">
+    <div class="q-topbar" id="q-topbar">
+      <button class="back-btn" onclick="prevQuestion()">←</button>
+      <div style="flex:1;">
+        <div id="q-counter" style="color:rgba(255,255,255,0.75);font-size:10px;font-weight:700;margin-bottom:5px;"></div>
+        <div class="progress-track"><div class="progress-fill" id="q-progress"></div></div>
+      </div>
+      <button class="speak-btn" onclick="speakCurrent()">🔊</button>
+    </div>
+
+    <div style="padding:14px 16px;display:flex;flex-direction:column;gap:12px;" class="fade-up" id="q-body">
+      <div id="q-patient-badge" class="card" style="display:flex;align-items:center;gap:10px;padding:11px 14px;"></div>
+      <div class="card card-lift" style="padding:22px 18px;" id="q-card">
+        <div id="q-text" style="font-size:18px;font-weight:800;color:var(--text);line-height:1.65;margin-bottom:24px;"></div>
+        <div id="q-input"></div>
+      </div>
+      <div id="q-dots" style="display:flex;gap:5px;justify-content:center;padding:4px 0;"></div>
+    </div>
+  </div>
+
+  <!-- ══ RESULT ══ -->
+  <div id="s-result" class="screen hidden">
+    <div id="result-banner"></div>
+    <div style="padding:16px;display:flex;flex-direction:column;gap:12px;" id="result-body"></div>
+  </div>
+
+  <!-- ══ HISTORY ══ -->
+  <div id="s-history" class="screen hidden">
+    <div style="background:var(--surface);padding:16px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div>
+        <div style="color:var(--text);font-size:16px;font-weight:800;">बिरामीहरूको इतिहास</div>
+        <div style="color:var(--teal);font-size:10px;font-weight:600;" id="hist-count"></div>
+      </div>
+    </div>
+    <div style="padding:12px 16px;" id="hist-list"></div>
+  </div>
+
+  <!-- ══ DASHBOARD ══ -->
+  <div id="s-dashboard" class="screen hidden">
+    <div style="background:var(--surface);padding:16px 16px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+      <button class="back-btn" onclick="goHome()">←</button>
+      <div>
+        <div style="color:var(--text);font-size:16px;font-weight:800;">सुपरभाइजर रिपोर्ट</div>
+        <div style="color:var(--teal);font-size:10px;font-weight:600;">जम्मा तथ्याङ्क</div>
+      </div>
+    </div>
+    <div style="padding:14px 16px 20px;display:flex;flex-direction:column;gap:12px;" id="dashboard-body"></div>
+  </div>
+
+  <!-- BOTTOM NAV -->
+  <div class="bottomnav" id="bottomnav">
+    <button class="navbtn active" id="nav-home" onclick="navTo('home')">
+      <span class="icon">🏠</span><span class="lbl">गृहपृष्ठ</span><div class="pip"></div>
+    </button>
+    <button class="navbtn" id="nav-history" onclick="navTo('history')">
+      <span class="icon">📋</span><span class="lbl">इतिहास</span><div class="pip"></div>
+    </button>
+    <button class="navbtn" id="nav-dashboard" onclick="navTo('dashboard')">
+      <span class="icon">📊</span><span class="lbl">रिपोर्ट</span><div class="pip"></div>
+    </button>
+  </div>
+
+</div>
+
+<script>
+// ════════════════════ DATA ════════════════════
+const DISEASES = [
+  {id:"hypertension", name:"रक्तचाप",       icon:"🫀", color:"#e8365d", soft:"#fdedf1", chip:"Hypertension"},
+  {id:"diabetes",     name:"मधुमेह",        icon:"🩸", color:"#f59e0b", soft:"#fef3c7", chip:"Diabetes"},
+  {id:"tb",           name:"क्षयरोग",       icon:"🫁", color:"#2563eb", soft:"#eff6ff", chip:"Tuberculosis"},
+  {id:"pregnancy",    name:"गर्भावस्था",    icon:"🤱", color:"#7c3aed", soft:"#f5f3ff", chip:"Pregnancy"},
+  {id:"child",        name:"बाल स्वास्थ्य", icon:"👶", color:"#059669", soft:"#ecfdf5", chip:"Child Health"},
+  {id:"malnutrition", name:"कुपोषण",        icon:"⚖️", color:"#0ea87e", soft:"#e6f7f2", chip:"Malnutrition"},
+];
+
+const QUESTIONS = {
+  hypertension:[
+    {id:"age",      text:"बिरामीको उमेर कति हो?",         type:"stepper", min:15, max:90,  unit:"वर्ष",  def:40},
+    {id:"systolic", text:"Systolic रक्तचाप कति छ?",      type:"stepper", min:90, max:210, unit:"mmHg", def:120},
+    {id:"diastolic",text:"Diastolic रक्तचाप कति छ?",     type:"stepper", min:50, max:130, unit:"mmHg", def:80},
+    {id:"headache", text:"टाउको बारम्बार दुख्छ?",         type:"yesno"},
+    {id:"chest",    text:"छातीमा दुखाइ वा भारीपन छ?",     type:"yesno"},
+    {id:"vision",   text:"आँखा धमिलो वा अन्धकार हुन्छ?",  type:"yesno"},
+    {id:"family",   text:"परिवारमा रक्तचापको रोग छ?",      type:"yesno"},
+    {id:"smoking",  text:"बिरामी धुम्रपान गर्छन्?",        type:"yesno"},
+  ],
+  diabetes:[
+    {id:"age",      text:"बिरामीको उमेर कति हो?",         type:"stepper", min:10, max:90,  unit:"वर्ष",  def:40},
+    {id:"weight",   text:"बिरामीको तौल कति किलो छ?",       type:"stepper", min:20, max:150, unit:"किलो", def:60},
+    {id:"thirst",   text:"धेरै तिर्खा लाग्छ?",            type:"yesno"},
+    {id:"urination",text:"पटक पटक पिसाब आउँछ?",          type:"yesno"},
+    {id:"fatigue",  text:"असाधारण थकाइ लाग्छ?",          type:"yesno"},
+    {id:"wound",    text:"घाउ चाँडो निको हुँदैन?",         type:"yesno"},
+    {id:"family",   text:"परिवारमा मधुमेहको रोग छ?",       type:"yesno"},
+  ],
+  tb:[
+    {id:"cough",    text:"खोकी कति हप्तादेखि लागेको छ?",  type:"stepper", min:0, max:24,  unit:"हप्ता", def:2},
+    {id:"fever",    text:"लामो समयदेखि ज्वरो आउँछ?",      type:"yesno"},
+    {id:"blood",    text:"खोकीमा रगत आउँछ?",              type:"yesno"},
+    {id:"weightloss",text:"तौल अचानक घटेको छ?",           type:"yesno"},
+    {id:"contact",  text:"TB बिरामीसँग नजिकको सम्पर्क?",  type:"yesno"},
+    {id:"sweat",    text:"राति सुत्दा धेरै पसिना आउँछ?",  type:"yesno"},
+  ],
+  pregnancy:[
+    {id:"weeks",    text:"गर्भावस्था कति हप्ताको छ?",      type:"stepper", min:4, max:42, unit:"हप्ता", def:20},
+    {id:"age",      text:"आमाको उमेर कति हो?",             type:"stepper", min:13,max:50, unit:"वर्ष",  def:25},
+    {id:"bphigh",   text:"रक्तचाप बढेको छ?",               type:"yesno"},
+    {id:"swelling", text:"खुट्टा वा अनुहार सुन्निएको छ?",  type:"yesno"},
+    {id:"bleeding", text:"योनिबाट रगत आएको छ?",            type:"yesno"},
+    {id:"movement", text:"बच्चाको हलचल कम भएको छ?",        type:"yesno"},
+    {id:"prev",     text:"अघिल्लो गर्भमा समस्या थियो?",    type:"yesno"},
+  ],
+  child:[
+    {id:"age_m",    text:"बच्चाको उमेर कति महिना भयो?",   type:"stepper", min:0, max:60, unit:"महिना", def:12},
+    {id:"weight_kg",text:"बच्चाको तौल कति किलो छ?",       type:"stepper", min:2, max:25, unit:"किलो",  def:8},
+    {id:"fever",    text:"बच्चालाई ज्वरो छ?",              type:"yesno"},
+    {id:"breathing",text:"सास फेर्न गाह्रो हुँदैछ?",       type:"yesno"},
+    {id:"diarrhea", text:"झाडापखाला छ?",                   type:"yesno"},
+    {id:"feeding",  text:"खाना खान मान्दैन?",              type:"yesno"},
+    {id:"convulsion",text:"छारे रोग वा ठोकी आयो?",        type:"yesno"},
+  ],
+  malnutrition:[
+    {id:"age_m",    text:"बच्चाको उमेर कति महिना?",        type:"stepper", min:6, max:60, unit:"महिना",  def:24},
+    {id:"muac",     text:"MUAC नाप कति सेन्टिमिटर?",      type:"stepper", min:8, max:20, unit:"से.मि.", def:14},
+    {id:"weight_kg",text:"बच्चाको तौल कति किलो?",          type:"stepper", min:3, max:25, unit:"किलो",   def:10},
+    {id:"edema",    text:"खुट्टामा थिचे पो बस्छ?",         type:"yesno"},
+    {id:"appetite", text:"खाना बिल्कुल खाँदैन?",           type:"yesno"},
+    {id:"hair",     text:"कपाल झर्ने वा रङ फेरिएको छ?",   type:"yesno"},
+  ],
+};
+
+const EDU = [
+  {icon:"🫀", name:"रक्तचाप",    tip:"नुन कम खानुस्।\nहरेक दिन हिँड्नुस्।\nनियमित औषधि खानुस्।"},
+  {icon:"🩸", name:"मधुमेह",     tip:"चिनी नखानुस्।\nनियमित रगत जाँच।\nव्यायाम गर्नुस्।"},
+  {icon:"🫁", name:"क्षयरोग",   tip:"पूरा ६ महिना औषधि।\nखोक्दा मुख छोप्नुस्।\nबीचमा नछोड्नुस्।"},
+  {icon:"🧼", name:"सरसफाई",    tip:"खाना अगाडि\nहात धुनुस्।\nसफा पानी पिउनुस्।"},
+  {icon:"🤱", name:"गर्भ जाँच", tip:"कम्तिमा ४ पटक\nजाँच गर्नुस्।\nफोलिक एसिड खानुस्।"},
+  {icon:"👶", name:"खोप",       tip:"समयमा सबै\nखोप लगाउनुस्।\nखोप सित्तैमा पाइन्छ।"},
+];
+
+const FACILITIES = [
+  {name:"धुलिखेल अस्पताल",      dist:"२.४ कि.मि.", phone:"011-490497", type:"अस्पताल"},
+  {name:"बनेपा स्वास्थ्य चौकी",  dist:"४.१ कि.मि.", phone:"011-661234", type:"स्वास्थ्य चौकी"},
+  {name:"पनौती प्राथमिक स्वास्थ्य",dist:"६.८ कि.मि.",phone:"011-490123", type:"प्राथमिक स्वास्थ्य"},
+];
+
+// ════════════════════ STATE ════════════════════
+let voiceOn = false;
+let curDisease = null;
+let qIdx = 0;
+let answers = {};
+let patientName = "", patientAge = "", patientGender = "";
+let currentResult = null;
+let patients = JSON.parse(localStorage.getItem("sw_patients")||"[]");
+let onboarded = localStorage.getItem("sw_onboarded")==="1";
+let obStep = 0;
+
+const OB = [
+  {icon:"🏥", title:"स्वास्थ्य सेवक", sub:"FCHV Digital Health Tool", desc:"यो एप FCHV ले समुदायमा बिरामीको जाँच गर्न बनाइएको हो। अफलाइन काम गर्छ। नेपाली आवाजमा प्रश्न सुनाउँछ।"},
+  {icon:"🩺", title:"कसरी प्रयोग गर्ने?", sub:"Simple 3 Steps", desc:"१. रोगको प्रकार छान्नुस्\n२. बिरामीको जानकारी भर्नुस्\n३. प्रश्नहरूको जवाफ दिनुस्\n\nनतिजामा जोखिम र सिफारिस देखाइन्छ।"},
+  {icon:"🔊", title:"आवाज सुविधा", sub:"Nepali Voice Support", desc:"माथि '🔊 आवाज' बटन थिच्नुस् भने सबै प्रश्न नेपाली भाषामा बोलेर सुनाइन्छ। पढ्न नजान्नेहरूका लागि उपयोगी छ।"},
+];
+
+// ════════════════════ VOICE ════════════════════
+function speak(text) {
+  if (!voiceOn) return;
+  if (window.responsiveVoice && responsiveVoice.voiceSupport()) {
+    responsiveVoice.cancel();
+    responsiveVoice.speak(text, "Nepali Female", {rate:0.85,pitch:1,volume:1});
+    return;
+  }
+  if (!window.speechSynthesis) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  const voices = speechSynthesis.getVoices();
+  const nv = voices.find(v=>v.lang.startsWith("ne")||v.lang.startsWith("hi"));
+  if (nv) u.voice = nv;
+  u.lang="ne-NP";u.rate=0.82;u.pitch=1;
+  speechSynthesis.speak(u);
+}
+function speakText(t){const p=voiceOn;voiceOn=true;speak(t);voiceOn=p;}
+function speakCurrent(){const qs=QUESTIONS[curDisease.id];if(qs&&qs[qIdx])speakText(qs[qIdx].text);}
+function toggleVoice(){
+  voiceOn=!voiceOn;
+  const b=document.getElementById("voiceToggle");
+  b.textContent=voiceOn?"🔊 आवाज चालु":"🔇 आवाज बन्द";
+  b.classList.toggle("on",voiceOn);
+  if(voiceOn)speakText("आवाज सुविधा चालु भयो।");
+}
+
+// ════════════════════ SCREENS ════════════════════
+const ALL_SCREENS=["s-onboard","s-home","s-info","s-question","s-result","s-history","s-dashboard"];
+function showScreen(id){
+  ALL_SCREENS.forEach(s=>{const e=document.getElementById(s);if(e)e.classList.add("hidden");});
+  const t=document.getElementById(id);
+  if(t){t.classList.remove("hidden");t.classList.add("fade-up");}
+  const nav=document.getElementById("bottomnav");
+  const topbar=document.getElementById("main-topbar");
+  const noNav=["s-onboard","s-info","s-question"];
+  const noTop=["s-onboard"];
+  nav.style.display=noNav.includes(id)?"none":"flex";
+  topbar.style.display=noTop.includes(id)?"none":"flex";
+}
+function navTo(tab){
+  ["home","history","dashboard"].forEach(t=>document.getElementById("nav-"+t).classList.remove("active"));
+  document.getElementById("nav-"+tab).classList.add("active");
+  showScreen("s-"+tab);
+  if(tab==="history")renderHistory();
+  if(tab==="dashboard")renderDashboard();
+  if(tab==="home")renderHome();
+}
+function goHome(){
+  curDisease=null;qIdx=0;answers={};patientName="";patientAge="";patientGender="";currentResult=null;
+  navTo("home");
+}
+
+// ════════════════════ ONBOARD ════════════════════
+function renderOnboard(){
+  const o=OB[obStep];
+  document.getElementById("ob-icon").textContent=o.icon;
+  document.getElementById("ob-title").textContent=o.title;
+  document.getElementById("ob-sub").textContent=o.sub;
+  document.getElementById("ob-desc").style.whiteSpace="pre-line";
+  document.getElementById("ob-desc").textContent=o.desc;
+  document.getElementById("ob-btn").textContent=obStep<OB.length-1?"अर्को →":"सुरु गरौं !";
+  const dots=document.getElementById("ob-dots");
+  dots.innerHTML="";
+  OB.forEach((_,i)=>{
+    const d=document.createElement("div");
+    d.style.cssText=`width:${i===obStep?24:8}px;height:8px;border-radius:4px;background:${i===obStep?"var(--teal)":"var(--teal-mid)"};transition:all 0.3s;`;
+    dots.appendChild(d);
+  });
+}
+function obNext(){
+  if(obStep<OB.length-1){obStep++;renderOnboard();}
+  else{localStorage.setItem("sw_onboarded","1");onboarded=true;navTo("home");renderHome();}
+}
+
+// ════════════════════ HOME ════════════════════
+function renderHome(){
+  // Date
+  const now=new Date();
+  const days=["आइत","सोम","मंगल","बुध","बिही","शुक्र","शनि"];
+  document.getElementById("today-date").textContent=days[now.getDay()]+" • "+now.toLocaleDateString("ne-NP");
+
+  // Stats
+  const today=new Date().toDateString();
+  const todayP=patients.filter(p=>new Date(p.dateISO).toDateString()===today);
+  const high=patients.filter(p=>p.score>=60).length;
+  const mod=patients.filter(p=>p.score>=30&&p.score<60).length;
+  const stats=[
+    {v:todayP.length,l:"आजको",     c:"rgba(255,255,255,0.95)"},
+    {v:patients.length,l:"जम्मा",  c:"rgba(255,255,255,0.95)"},
+    {v:high,           l:"उच्च",   c:"#fca5a5"},
+    {v:mod,            l:"मध्यम",  c:"#fde68a"},
+  ];
+  document.getElementById("stats-row").innerHTML=stats.map(s=>`
+    <div class="stat-box" style="flex:1;">
+      <div style="font-size:22px;font-weight:900;color:${s.c};">${s.v}</div>
+      <div style="font-size:9px;color:rgba(255,255,255,0.6);margin-top:1px;">${s.l}</div>
+    </div>`).join("");
+
+  // Disease grid
+  document.getElementById("disease-grid").innerHTML=DISEASES.map(d=>`
+    <button class="disease-card" onclick="selectDisease('${d.id}')" style="border-color:${d.color}30;">
+      <div class="d-icon" style="background:${d.soft};">${d.icon}</div>
+      <div class="d-name">${d.name}</div>
+      <div class="d-chip" style="background:${d.soft};color:${d.color};">${d.chip}</div>
+    </button>`).join("");
+
+  // Edu
+  document.getElementById("edu-scroll").innerHTML=EDU.map(e=>`
+    <div class="edu-card">
+      <div style="font-size:24px;margin-bottom:8px;">${e.icon}</div>
+      <div style="font-size:12px;font-weight:800;color:var(--text);margin-bottom:5px;">${e.name}</div>
+      <div style="font-size:10px;color:var(--muted);line-height:1.7;white-space:pre-line;">${e.tip}</div>
+    </div>`).join("");
+
+  // Recent
+  const rec=patients.slice(0,3);
+  document.getElementById("recent-list").innerHTML=rec.length===0
+    ?`<div style="text-align:center;color:var(--faint);padding:28px;font-size:13px;background:var(--card);border-radius:14px;border:1px dashed var(--border2);">अहिलेसम्म कुनै रेकर्ड छैन।</div>`
+    :rec.map(p=>patientRowHTML(p)).join("");
+}
+
+// ════════════════════ DISEASE SELECT ════════════════════
+function selectDisease(id){
+  curDisease=DISEASES.find(d=>d.id===id);
+  qIdx=0;answers={};patientName="";patientAge="";patientGender="";
+  document.getElementById("inp-name").value="";
+  document.getElementById("inp-age").value="";
+  document.getElementById("info-disease-badge").innerHTML=`
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:${curDisease.soft};display:flex;align-items:center;justify-content:center;font-size:26px;">${curDisease.icon}</div>
+      <div>
+        <div style="font-size:18px;font-weight:900;color:${curDisease.color};letter-spacing:-0.3px;">${curDisease.name}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px;">${QUESTIONS[curDisease.id].length} प्रश्नहरू • लगभग २ मिनेट</div>
+      </div>
+    </div>`;
+  document.getElementById("start-btn").style.background=`linear-gradient(135deg,${curDisease.color},${curDisease.color}dd)`;
+  showScreen("s-info");
+  speak(`${curDisease.name} जाँचको लागि बिरामीको जानकारी भर्नुस्।`);
+}
+
+function setGender(g){
+  patientGender=g;
+  const mBtn=document.getElementById("gender-m");
+  const fBtn=document.getElementById("gender-f");
+  mBtn.style.borderWidth=g==="पुरुष"?"2.5px":"1.5px";
+  fBtn.style.borderWidth=g==="महिला"?"2.5px":"1.5px";
+  mBtn.style.fontWeight=g==="पुरुष"?"800":"600";
+  fBtn.style.fontWeight=g==="महिला"?"800":"600";
+}
+
+function beginQuestions(){
+  patientName=document.getElementById("inp-name").value.trim();
+  patientAge=document.getElementById("inp-age").value.trim();
+  qIdx=0;answers={};
+  renderQuestion();showScreen("s-question");
+  speak(QUESTIONS[curDisease.id][0].text);
+}
+
+// ════════════════════ QUESTIONS ════════════════════
+function renderQuestion(){
+  const qs=QUESTIONS[curDisease.id];
+  const q=qs[qIdx];
+  const pct=Math.round(((qIdx+1)/qs.length)*100);
+
+  // Style q-topbar with disease color
+  const qt=document.getElementById("q-topbar");
+  qt.style.background=curDisease.color;
+
+  document.getElementById("q-counter").textContent=`প्रश्न ${nep(qIdx+1)} / ${nep(qs.length)}`;
+  document.getElementById("q-progress").style.width=pct+"%";
+
+  document.getElementById("q-patient-badge").innerHTML=`
+    <div style="width:32px;height:32px;border-radius:9px;background:${curDisease.soft};display:flex;align-items:center;justify-content:center;font-size:15px;">${curDisease.icon}</div>
+    <span style="font-size:13px;font-weight:700;color:var(--text);">${patientName||"बेनामी बिरामी"}</span>
+    ${patientAge?`<span style="font-size:11px;color:var(--muted);">• ${patientAge} वर्ष</span>`:""}
+    ${patientGender?`<span style="font-size:11px;color:var(--muted);">• ${patientGender}</span>`:""}`;
+
+  document.getElementById("q-text").textContent=q.text;
+
+  const inp=document.getElementById("q-input");
+  if(q.type==="stepper"){
+    const val=answers[q.id]!==undefined?answers[q.id]:q.def;
+    inp.innerHTML=`
+      <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:18px;">
+        <button class="stepper-btn" style="border-color:${curDisease.color}40;" onclick="stepChange(-1)">−</button>
+        <div style="text-align:center;min-width:100px;">
+          <div style="font-size:54px;font-weight:900;color:${curDisease.color};line-height:1;" id="step-val">${val}</div>
+          <div style="font-size:13px;color:var(--muted);margin-top:3px;font-weight:600;">${q.unit}</div>
+        </div>
+        <button class="stepper-btn" style="border-color:${curDisease.color}40;" onclick="stepChange(1)">+</button>
+      </div>
+      <input type="range" min="${q.min}" max="${q.max}" value="${val}" id="step-range"
+        oninput="stepRangeChange(this.value)"
+        style="accent-color:${curDisease.color};"/>
+      <button class="btn" onclick="nextStepper()" style="background:linear-gradient(135deg,${curDisease.color},${curDisease.color}cc);color:#fff;font-size:15px;">अर्को →</button>`;
+    answers[q.id]=val;
+  } else {
+    inp.innerHTML=`
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <button class="btn-yes" onclick="answerYesNo(true)">✓ &nbsp;&nbsp; छ</button>
+        <button class="btn-no" onclick="answerYesNo(false)">✗ &nbsp;&nbsp; छैन</button>
+      </div>`;
+  }
+
+  const dots=document.getElementById("q-dots");
+  dots.innerHTML=qs.map((_,i)=>`
+    <div style="width:${i===qIdx?18:7}px;height:7px;border-radius:4px;
+      background:${i<=qIdx?curDisease.color:"var(--border2)"};
+      opacity:${i===qIdx?1:i<qIdx?0.5:0.3};transition:all 0.3s;"></div>`).join("");
+}
+
+function stepChange(d){
+  const q=QUESTIONS[curDisease.id][qIdx];
+  const cur=answers[q.id]!==undefined?answers[q.id]:q.def;
+  const nv=Math.min(q.max,Math.max(q.min,cur+d));
+  answers[q.id]=nv;
+  document.getElementById("step-val").textContent=nv;
+  document.getElementById("step-range").value=nv;
+}
+function stepRangeChange(v){
+  const q=QUESTIONS[curDisease.id][qIdx];
+  answers[q.id]=Number(v);
+  document.getElementById("step-val").textContent=v;
+}
+function nextStepper(){
+  const q=QUESTIONS[curDisease.id][qIdx];
+  if(answers[q.id]===undefined)answers[q.id]=q.def;
+  goNext();
+}
+function answerYesNo(val){
+  const q=QUESTIONS[curDisease.id][qIdx];
+  answers[q.id]=val;
+  setTimeout(goNext,200);
+}
+function goNext(){
+  const qs=QUESTIONS[curDisease.id];
+  if(qIdx<qs.length-1){qIdx++;renderQuestion();speak(qs[qIdx].text);}
+  else finishAssessment();
+}
+function prevQuestion(){
+  if(qIdx>0){qIdx--;renderQuestion();}
+  else showScreen("s-info");
+}
+
+// ════════════════════ SCORING ════════════════════
+function computeRisk(id,a){
+  let s=0;
+  if(id==="hypertension"){
+    if(a.systolic>=140)s+=40;else if(a.systolic>=130)s+=20;
+    if(a.diastolic>=90)s+=20;else if(a.diastolic>=85)s+=10;
+    if(a.age>=55)s+=15;if(a.headache)s+=8;if(a.chest)s+=10;
+    if(a.vision)s+=10;if(a.family)s+=8;if(a.smoking)s+=8;
+  }else if(id==="diabetes"){
+    if(a.weight>=90)s+=15;if(a.age>=45)s+=20;
+    if(a.thirst)s+=20;if(a.urination)s+=20;if(a.fatigue)s+=10;
+    if(a.wound)s+=15;if(a.family)s+=15;
+  }else if(id==="tb"){
+    if(a.cough>=3)s+=30;else if(a.cough>=2)s+=15;
+    if(a.blood)s+=35;if(a.fever)s+=15;if(a.weightloss)s+=15;
+    if(a.contact)s+=20;if(a.sweat)s+=10;
+  }else if(id==="pregnancy"){
+    if(a.bleeding)s+=40;if(a.bphigh)s+=30;if(a.swelling)s+=20;
+    if(a.movement)s+=25;if(a.age<18||a.age>35)s+=15;if(a.prev)s+=15;
+  }else if(id==="child"){
+    if(a.convulsion)s+=50;if(a.breathing)s+=35;if(a.fever)s+=20;
+    if(a.feeding)s+=20;if(a.diarrhea)s+=15;
+  }else if(id==="malnutrition"){
+    if(a.muac<11.5)s+=50;else if(a.muac<12.5)s+=30;else if(a.muac<13.5)s+=15;
+    if(a.edema)s+=30;if(a.appetite)s+=10;if(a.hair)s+=10;
+  }
+  return Math.min(s,100);
+}
+
+function riskLevel(score){
+  if(score>=60)return{label:"उच्च जोखिम",color:"#e8365d",soft:"#fdedf1",action:"तुरुन्तै अस्पताल पठाउनुस्!",emoji:"🚨",referral:true};
+  if(score>=30)return{label:"मध्यम जोखिम",color:"#f59e0b",soft:"#fef3c7",action:"७ दिनभित्र स्वास्थ्य चौकी जानुस्।",emoji:"⚠️",referral:false};
+  return{label:"कम जोखिम",color:"#059669",soft:"#ecfdf5",action:"नियमित स्वास्थ्य अनुगमन गर्नुस्।",emoji:"✅",referral:false};
+}
+
+// ════════════════════ RESULT ════════════════════
+function finishAssessment(){
+  const score=computeRisk(curDisease.id,answers);
+  const risk=riskLevel(score);
+  currentResult={
+    id:Date.now(),disease:curDisease.id,diseaseName:curDisease.name,
+    icon:curDisease.icon,color:curDisease.color,
+    name:patientName||"बेनामी बिरामी",age:patientAge,gender:patientGender,
+    score,risk,answers:{...answers},
+    date:new Date().toLocaleDateString("ne-NP"),
+    dateISO:new Date().toISOString(),
+  };
+  patients=[currentResult,...patients.slice(0,49)];
+  localStorage.setItem("sw_patients",JSON.stringify(patients));
+  renderResult(currentResult);
+  showScreen("s-result");
+  speak(`${risk.label}। ${risk.action}`);
+}
+
+function renderResult(r){
+  // Banner
+  document.getElementById("result-banner").innerHTML=`
+    <div style="background:${r.risk.color};padding:28px 18px 22px;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,0.07);"></div>
+      <div style="position:absolute;bottom:-30px;left:-20px;width:100px;height:100px;border-radius:50%;background:rgba(0,0,0,0.07);"></div>
+      <div style="position:relative;z-index:1;">
+        <div style="font-size:40px;margin-bottom:10px;">${r.risk.emoji}</div>
+        <div style="font-size:28px;font-weight:900;color:#fff;letter-spacing:-0.5px;">${r.risk.label}</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <span style="background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:#fff;font-weight:600;">${r.name}</span>
+          <span style="background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:#fff;font-weight:600;">${r.diseaseName}</span>
+          <span style="background:rgba(255,255,255,0.2);border-radius:20px;padding:4px 10px;font-size:11px;color:#fff;font-weight:600;">${r.date}</span>
+        </div>
+      </div>
+    </div>`;
+
+  const qs=QUESTIONS[r.disease];
+  let body=`
+    <!-- Score -->
+    <div class="card card-lift" style="padding:18px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+        <div>
+          <div class="sec-label" style="margin-bottom:2px;">जोखिम स्कोर</div>
+          <div style="font-size:12px;color:var(--muted);">Risk Assessment Score</div>
+        </div>
+        <div style="font-size:40px;font-weight:900;color:${r.risk.color};line-height:1;">${r.score}<span style="font-size:16px;color:var(--muted);">/१००</span></div>
+      </div>
+      <div style="background:var(--border);border-radius:6px;height:12px;overflow:hidden;">
+        <div style="height:100%;width:${r.score}%;background:${r.risk.color};border-radius:6px;transition:width 1.2s ease;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;">
+        <span style="font-size:9px;color:#059669;font-weight:700;">० कम</span>
+        <span style="font-size:9px;color:#f59e0b;font-weight:700;">३० मध्यम</span>
+        <span style="font-size:9px;color:#e8365d;font-weight:700;">६०+ उच्च</span>
+      </div>
+    </div>
+
+    <!-- Action -->
+    <div style="background:${r.risk.soft};border:1.5px solid ${r.risk.color}40;border-radius:16px;padding:18px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+        <div style="width:6px;height:6px;border-radius:50%;background:${r.risk.color};"></div>
+        <div style="font-size:10px;font-weight:800;color:${r.risk.color};letter-spacing:1px;text-transform:uppercase;">सिफारिस गरिएको कदम</div>
+      </div>
+      <div style="font-size:17px;font-weight:900;color:var(--text);line-height:1.5;">${r.risk.action}</div>
+    </div>`;
+
+  if(r.risk.referral){
+    body+=`
+    <div class="card card-lift" style="padding:16px;">
+      <div class="sec-label">🏥 नजिकका स्वास्थ्य केन्द्रहरू</div>
+      ${FACILITIES.map(f=>`
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);">
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--text);">${f.name}</div>
+            <div style="font-size:10px;color:var(--muted);margin-top:2px;">${f.type} &nbsp;•&nbsp; ${f.dist}</div>
+          </div>
+          <a href="tel:${f.phone}" style="background:var(--green-light);border:1.5px solid var(--teal-mid);border-radius:10px;padding:8px 14px;color:var(--teal-dark);font-size:11px;font-weight:800;text-decoration:none;font-family:inherit;white-space:nowrap;">📞 फोन</a>
+        </div>`).join("")}
+    </div>`;
+  }
+
+  body+=`
+    <div class="card" style="padding:16px;">
+      <div class="sec-label">📋 रेफरल पर्ची</div>
+      <div class="slip">
+━━━━━━━━━━━━━━━━━━━━━━━━━
+  स्वास्थ्य सेवक — रेफरल पर्ची
+━━━━━━━━━━━━━━━━━━━━━━━━━
+बिरामीको नाम : ${r.name}
+उमेर / लिङ्ग  : ${r.age||"—"} वर्ष / ${r.gender||"—"}
+रोगको प्रकार  : ${r.diseaseName}
+जोखिम स्तर   : ${r.risk.label} (${r.score}/१००)
+मिति          : ${r.date}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+सिफारिस       : ${r.risk.action}
+━━━━━━━━━━━━━━━━━━━━━━━━━
+FCHV हस्ताक्षर: ___________
+      </div>
+    </div>
+
+    <div class="card" style="padding:16px;">
+      <div class="sec-label">दिइएका जवाफहरू</div>
+      ${qs.map(q=>`
+        <div style="display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--border);font-size:12px;gap:8px;">
+          <span style="color:var(--muted);flex:1;">${q.text}</span>
+          <span style="font-weight:800;color:${r.risk.color};white-space:nowrap;">
+            ${q.type==="yesno"?(r.answers[q.id]?"✓ छ":"✗ छैन"):`${r.answers[q.id]??q.def} ${q.unit}`}
+          </span>
+        </div>`).join("")}
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding-bottom:8px;">
+      <button class="btn" onclick="selectDisease('${r.disease}')" style="background:linear-gradient(135deg,${r.color},${r.color}cc);color:#fff;font-size:14px;">🔄 नयाँ बिरामी</button>
+      <button class="btn" onclick="goHome()" style="background:var(--bg);color:var(--text2);border:1.5px solid var(--border2);font-size:14px;">🏠 गृहपृष्ठ</button>
+    </div>`;
+
+  document.getElementById("result-body").innerHTML=body;
+}
+
+// ════════════════════ HISTORY ════════════════════
+function renderHistory(){
+  document.getElementById("hist-count").textContent=`${patients.length} रेकर्डहरू अफलाइन सुरक्षित`;
+  document.getElementById("hist-list").innerHTML=patients.length===0
+    ?`<div style="text-align:center;color:var(--faint);padding:56px 24px;font-size:13px;background:var(--card);border-radius:16px;border:1px dashed var(--border2);">कुनै रेकर्ड छैन।</div>`
+    :patients.map(p=>patientRowHTML(p)).join("");
+}
+
+// ════════════════════ DASHBOARD ════════════════════
+function renderDashboard(){
+  const high=patients.filter(p=>p.score>=60).length;
+  const mod=patients.filter(p=>p.score>=30&&p.score<60).length;
+  const low=patients.filter(p=>p.score<30).length;
+  const total=patients.length;
+
+  let html=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      ${[
+        {l:"जम्मा जाँच",  v:total,c:"var(--teal)"},
+        {l:"उच्च जोखिम", v:high, c:"var(--red)"},
+        {l:"मध्यम जोखिम",v:mod,  c:"var(--amber)"},
+        {l:"कम जोखिम",   v:low,  c:"var(--green)"},
+      ].map(s=>`
+        <div class="card card-lift" style="padding:16px;border-top:3px solid ${s.c};">
+          <div style="font-size:34px;font-weight:900;color:${s.c};">${s.v}</div>
+          <div style="font-size:12px;font-weight:700;color:var(--text2);margin-top:3px;">${s.l}</div>
+        </div>`).join("")}
+    </div>
+
+    <div class="card card-lift" style="padding:16px;">
+      <div class="sec-label">रोग अनुसार विश्लेषण</div>
+      ${DISEASES.map(d=>{
+        const cnt=patients.filter(p=>p.disease===d.id).length;
+        const pct=total>0?Math.round((cnt/total)*100):0;
+        return `
+          <div style="margin-bottom:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
+              <span style="font-size:12px;font-weight:700;color:var(--text);">${d.icon} ${d.name}</span>
+              <span style="font-size:12px;font-weight:800;color:${d.color};">${cnt} (${pct}%)</span>
+            </div>
+            <div style="background:var(--border);border-radius:4px;height:7px;overflow:hidden;">
+              <div style="height:100%;width:${pct}%;background:${d.color};border-radius:4px;transition:width 0.8s;"></div>
+            </div>
+          </div>`;
+      }).join("")}
+    </div>
+
+    <div class="card card-lift" style="padding:16px;">
+      <div class="sec-label">जोखिम वितरण</div>
+      <div style="display:flex;align-items:flex-end;gap:16px;height:100px;padding:0 16px;">
+        ${[{l:"उच्च",v:high,c:"#e8365d"},{l:"मध्यम",v:mod,c:"#f59e0b"},{l:"कम",v:low,c:"#059669"}].map(b=>{
+          const max=Math.max(1,high,mod,low);
+          const h=Math.max(10,Math.round((b.v/max)*75));
+          return `
+            <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;">
+              <div style="font-size:15px;font-weight:900;color:${b.c};">${b.v}</div>
+              <div style="width:100%;height:${h}px;background:${b.c};border-radius:8px 8px 0 0;opacity:0.85;"></div>
+              <div style="font-size:10px;color:var(--muted);font-weight:700;">${b.l}</div>
+            </div>`;
+        }).join("")}
+      </div>
+    </div>
+
+    <div style="background:var(--teal-light);border:1px solid var(--teal-mid);border-radius:14px;padding:16px;">
+      <div style="font-size:12px;font-weight:800;color:var(--teal-dark);margin-bottom:6px;">📤 डेटा निर्यात</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.7;">पूर्ण एपमा यो डेटा जिल्ला स्वास्थ्य कार्यालयमा मासिक रूपमा पठाइन्छ। सबै डेटा इन्क्रिप्टेड र गोप्य हुन्छ।</div>
+    </div>`;
+
+  document.getElementById("dashboard-body").innerHTML=html;
+}
+
+// ════════════════════ HELPERS ════════════════════
+function patientRowHTML(p){
+  const rl=riskLevel(p.score);
+  return `
+    <div class="patient-row">
+      <div style="width:44px;height:44px;border-radius:12px;background:${p.color}18;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;">${p.icon}</div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:800;color:var(--text);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${p.name}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px;">${p.diseaseName} &nbsp;•&nbsp; ${p.date}</div>
+      </div>
+      <div style="text-align:right;flex-shrink:0;">
+        <div style="background:${rl.soft};border:1px solid ${rl.color}40;border-radius:20px;padding:3px 10px;display:flex;align-items:center;gap:4px;">
+          <span style="font-size:16px;font-weight:900;color:${rl.color};line-height:1;">${p.score}</span>
+          <span style="font-size:8px;color:${rl.color};font-weight:800;">${p.score>=60?"उच्च":p.score>=30?"मध्यम":"कम"}</span>
+        </div>
+      </div>
+    </div>`;
+}
+
+function nep(n){return String(n).replace(/[0-9]/g,d=>"०१२३४५६७८९"[d]);}
+
+// ════════════════════ INIT ════════════════════
+window.addEventListener("load",()=>{
+  if(!onboarded){showScreen("s-onboard");renderOnboard();}
+  else{navTo("home");renderHome();}
+  if(window.speechSynthesis){
+    speechSynthesis.getVoices();
+    speechSynthesis.onvoiceschanged=()=>speechSynthesis.getVoices();
+  }
+});
+</script>
+</body>
+</html>
